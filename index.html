@@ -3,13 +3,17 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
-      content="width=device-width, initial-scale=1.0,
-               maximum-scale=1.0, user-scalable=no">
+      content="width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               user-scalable=no">
 
 <title>온라인 오목</title>
 
 <style>
+
 * {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
@@ -18,9 +22,13 @@
 body {
     margin: 0;
     min-height: 100vh;
+
     background: #222;
     color: white;
-    font-family: Arial, sans-serif;
+
+    font-family:
+        Arial,
+        sans-serif;
 
     display: flex;
     justify-content: center;
@@ -29,8 +37,9 @@ body {
 
 .container {
     width: min(96vw, 760px);
-    text-align: center;
     padding: 10px;
+
+    text-align: center;
 }
 
 h1 {
@@ -46,30 +55,40 @@ h1 {
 
 .menu {
     background: #333;
+
     padding: 14px;
+
     border-radius: 12px;
+
     margin-bottom: 12px;
 }
 
 button,
 input {
+
     border: 0;
     border-radius: 8px;
+
     padding: 11px 15px;
+
     margin: 4px;
 
     font-size: 16px;
 }
 
 button {
+
     background: #e0a83b;
+
     color: #111;
+
     font-weight: bold;
+
     cursor: pointer;
 }
 
 button:active {
-    transform: scale(0.97);
+    transform: scale(.97);
 }
 
 input {
@@ -81,10 +100,14 @@ input {
 }
 
 .mode-button {
+
     width: 90%;
     max-width: 350px;
-    margin: 7px auto;
+
     display: block;
+
+    margin: 7px auto;
+
     padding: 14px;
 }
 
@@ -99,19 +122,36 @@ input {
 }
 
 #roomCode {
-    font-size: 24px;
+
+    font-size: 25px;
+
     font-weight: bold;
+
     color: #ffd75a;
+
     margin: 8px;
 }
 
+#connectionState {
+
+    margin: 7px;
+
+    font-size: 14px;
+
+    color: #8fc7ff;
+}
+
 #boardWrap {
+
     width: 100%;
+
     display: flex;
+
     justify-content: center;
 }
 
 #board {
+
     width: min(94vw, 700px);
     height: min(94vw, 700px);
 
@@ -136,11 +176,14 @@ input {
 }
 
 .cell {
+
     position: relative;
+
     cursor: pointer;
 }
 
 .cell::before {
+
     content: "";
 
     position: absolute;
@@ -156,6 +199,7 @@ input {
 }
 
 .cell::after {
+
     content: "";
 
     position: absolute;
@@ -171,6 +215,7 @@ input {
 }
 
 .stone {
+
     position: absolute;
 
     width: 82%;
@@ -190,6 +235,7 @@ input {
 }
 
 .black {
+
     background:
         radial-gradient(
             circle at 35% 30%,
@@ -200,6 +246,7 @@ input {
 }
 
 .white {
+
     background:
         radial-gradient(
             circle at 35% 30%,
@@ -210,12 +257,16 @@ input {
 }
 
 .last {
+
     outline: 3px solid red;
+
     outline-offset: -2px;
 }
 
 .info {
+
     margin-top: 12px;
+
     font-size: 17px;
 }
 
@@ -243,203 +294,258 @@ input {
     }
 
 }
+
 </style>
 </head>
 
+
 <body>
+
 
 <div class="container">
 
-    <h1>⚫ 온라인 오목 ⚪</h1>
 
-    <div id="status">
-        게임 모드를 선택하세요.
-    </div>
+<h1>⚫ 온라인 오목 ⚪</h1>
 
 
-    <!-- ========================= -->
-    <!-- 모드 선택 -->
-    <!-- ========================= -->
-
-    <div id="modeMenu" class="menu">
-
-        <button
-            id="localModeBtn"
-            class="mode-button">
-
-            👥 2인 대전
-            <br>
-            <small>한 기기에서 두 명이 플레이</small>
-
-        </button>
+<div id="status">
+게임 모드를 선택하세요.
+</div>
 
 
-        <button
-            id="onlineModeBtn"
-            class="mode-button online-button">
+<!-- ========================= -->
+<!-- 모드 선택 -->
+<!-- ========================= -->
 
-            🌐 온라인 대전
-            <br>
-            <small>친구와 다른 기기에서 플레이</small>
+<div id="modeMenu" class="menu">
 
-        </button>
+    <button
+        id="localModeBtn"
+        class="mode-button">
 
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- 온라인 메뉴 -->
-    <!-- ========================= -->
-
-    <div
-        id="onlineMenu"
-        class="menu hidden">
-
-        <button id="createBtn">
-            방 만들기
-        </button>
+        👥 2인 대전
 
         <br>
 
-        <input
-            id="roomInput"
-            type="text"
-            placeholder="방 코드 입력"
-            maxlength="20">
+        <small>
+        한 기기에서 두 명이 플레이
+        </small>
 
-        <button id="joinBtn">
-            방 참가
-        </button>
+    </button>
+
+
+    <button
+        id="onlineModeBtn"
+        class="mode-button online-button">
+
+        🌐 온라인 대전
 
         <br>
 
-        <button
-            id="backFromOnlineBtn"
-            class="back-button">
+        <small>
+        친구와 다른 기기에서 플레이
+        </small>
 
-            ← 모드 선택
+    </button>
 
-        </button>
-
-    </div>
+</div>
 
 
-    <!-- ========================= -->
-    <!-- 방 정보 -->
-    <!-- ========================= -->
+<!-- ========================= -->
+<!-- 온라인 메뉴 -->
+<!-- ========================= -->
 
-    <div
-        id="roomInfo"
-        class="menu hidden">
-
-        <div>
-            친구에게 이 코드를 알려주세요.
-        </div>
-
-        <div id="roomCode">
-            -
-        </div>
-
-        <button id="copyBtn">
-            코드 복사
-        </button>
-
-        <button id="onlineNewGameBtn">
-            새 게임
-        </button>
-
-        <button
-            id="backFromRoomBtn"
-            class="back-button">
-
-            모드 선택
-
-        </button>
-
-    </div>
+<div
+    id="onlineMenu"
+    class="menu hidden">
 
 
-    <!-- ========================= -->
-    <!-- 로컬 게임 메뉴 -->
-    <!-- ========================= -->
+    <button id="createBtn">
 
-    <div
-        id="localMenu"
-        class="menu hidden">
+        방 만들기
 
-        <button id="localNewGameBtn">
-            새 게임
-        </button>
-
-        <button
-            id="backFromLocalBtn"
-            class="back-button">
-
-            모드 선택
-
-        </button>
-
-    </div>
+    </button>
 
 
-    <!-- ========================= -->
-    <!-- 게임판 -->
-    <!-- ========================= -->
+    <br>
 
-    <div id="boardWrap">
 
-        <div id="board"></div>
+    <input
+        id="roomInput"
+        type="text"
+        placeholder="방 코드 입력"
+        maxlength="6"
+        autocomplete="off">
+
+
+    <button id="joinBtn">
+
+        방 참가
+
+    </button>
+
+
+    <br>
+
+
+    <button
+        id="backFromOnlineBtn"
+        class="back-button">
+
+        ← 모드 선택
+
+    </button>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- 방 정보 -->
+<!-- ========================= -->
+
+<div
+    id="roomInfo"
+    class="menu hidden">
+
+
+    <div>
+
+        친구에게 이 코드를 알려주세요.
 
     </div>
 
 
-    <div class="info">
+    <div id="roomCode">
+        -
+    </div>
 
-        <span id="gameMode">
-            모드: -
-        </span>
 
-        &nbsp; | &nbsp;
+    <div id="connectionState">
 
-        <span id="turnText">
-            차례: -
-        </span>
+        연결 준비 중...
 
     </div>
 
 
-    <div
-        id="localInfo"
-        class="info hidden">
+    <button id="copyBtn">
 
-        ⚫ 흑과 ⚪ 백이 번갈아 둡니다.
+        코드 복사
 
-    </div>
+    </button>
 
 
-    <div
-        id="onlineInfo"
-        class="info hidden">
+    <button id="onlineNewGameBtn">
 
-        온라인 대전
+        새 게임
 
-    </div>
+    </button>
+
+
+    <button
+        id="backFromRoomBtn"
+        class="back-button">
+
+        모드 선택
+
+    </button>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- 로컬 메뉴 -->
+<!-- ========================= -->
+
+<div
+    id="localMenu"
+    class="menu hidden">
+
+
+    <button id="localNewGameBtn">
+
+        새 게임
+
+    </button>
+
+
+    <button
+        id="backFromLocalBtn"
+        class="back-button">
+
+        모드 선택
+
+    </button>
+
+</div>
+
+
+<!-- ========================= -->
+<!-- 오목판 -->
+<!-- ========================= -->
+
+<div id="boardWrap">
+
+    <div id="board"></div>
+
+</div>
+
+
+<div class="info">
+
+    <span id="gameMode">
+        모드: -
+    </span>
+
+    &nbsp; | &nbsp;
+
+    <span id="turnText">
+        차례: -
+    </span>
+
+</div>
+
+
+<div
+    id="localInfo"
+    class="info hidden">
+
+    ⚫ 흑과 ⚪ 백이 번갈아 둡니다.
+
+</div>
+
+
+<div
+    id="onlineInfo"
+    class="info hidden">
+
+    🌐 온라인 대전
+
+</div>
+
 
 </div>
 
 
 <!-- PeerJS -->
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+<script
+src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js">
+</script>
 
 
 <script>
 
+
+/* =====================================================
+   기본 설정
+===================================================== */
+
 const SIZE = 15;
 
 
-// =====================================
-// 상태
-// =====================================
+/* =====================================================
+   게임 상태
+===================================================== */
 
 let board = [];
 
@@ -449,35 +555,41 @@ let gameOver = false;
 
 let lastMove = null;
 
-
-// 게임 모드
-// "none"
-// "local"
-// "online"
+let moveNumber = 0;
 
 let gameMode = "none";
 
 
-// =====================================
-// 온라인 상태
-// =====================================
+/* =====================================================
+   온라인 상태
+===================================================== */
 
 let peer = null;
 
 let connection = null;
 
-let roomId = null;
+let peerId = null;
 
 let roomCode = null;
 
-let isHost = false;
+let roomId = null;
 
 let myColor = null;
 
+let isHost = false;
 
-// =====================================
-// DOM
-// =====================================
+let connected = false;
+
+let connectionHandled = false;
+
+let reconnectTimer = null;
+
+let reconnectAttempts = 0;
+
+
+/* =====================================================
+   DOM
+===================================================== */
 
 const boardElement =
     document.getElementById("board");
@@ -485,11 +597,11 @@ const boardElement =
 const statusElement =
     document.getElementById("status");
 
-const turnText =
-    document.getElementById("turnText");
-
-const gameModeText =
+const gameModeElement =
     document.getElementById("gameMode");
+
+const turnTextElement =
+    document.getElementById("turnText");
 
 const modeMenu =
     document.getElementById("modeMenu");
@@ -506,6 +618,11 @@ const roomInfo =
 const roomCodeElement =
     document.getElementById("roomCode");
 
+const connectionState =
+    document.getElementById(
+        "connectionState"
+    );
+
 const localInfo =
     document.getElementById("localInfo");
 
@@ -513,9 +630,76 @@ const onlineInfo =
     document.getElementById("onlineInfo");
 
 
-// =====================================
-// 보드 생성
-// =====================================
+/* =====================================================
+   유틸
+===================================================== */
+
+function setStatus(text) {
+
+    statusElement.textContent = text;
+
+}
+
+
+function setConnectionStatus(text) {
+
+    connectionState.textContent = text;
+
+}
+
+
+function generateRoomCode() {
+
+    const chars =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let result = "";
+
+    for (let i = 0; i < 6; i++) {
+
+        result +=
+            chars[
+                Math.floor(
+                    Math.random() *
+                    chars.length
+                )
+            ];
+
+    }
+
+    return result;
+
+}
+
+
+/*
+   실제 PeerJS ID는 방 코드와 분리한다.
+
+   예:
+   방 코드: AB7KQ2
+   Peer ID: gomoku-host-AB7KQ2-x8f2...
+*/
+
+function generatePeerId(code) {
+
+    const random =
+        Math.random()
+            .toString(36)
+            .substring(2, 10);
+
+    return (
+        "gomoku-host-" +
+        code +
+        "-" +
+        random
+    );
+
+}
+
+
+/* =====================================================
+   보드 생성
+===================================================== */
 
 function createBoard() {
 
@@ -531,6 +715,7 @@ function createBoard() {
 
             board[y][x] = null;
 
+
             const cell =
                 document.createElement("div");
 
@@ -539,9 +724,10 @@ function createBoard() {
             cell.dataset.x = x;
             cell.dataset.y = y;
 
+
             cell.addEventListener(
                 "click",
-                () => {
+                function () {
 
                     handleCellClick(
                         x,
@@ -551,15 +737,19 @@ function createBoard() {
                 }
             );
 
+
             boardElement.appendChild(cell);
+
         }
+
     }
+
 }
 
 
-// =====================================
-// 셀 클릭
-// =====================================
+/* =====================================================
+   클릭 처리
+===================================================== */
 
 function handleCellClick(x, y) {
 
@@ -568,6 +758,7 @@ function handleCellClick(x, y) {
         placeLocalStone(x, y);
 
         return;
+
     }
 
 
@@ -576,14 +767,15 @@ function handleCellClick(x, y) {
         placeOnlineStone(x, y);
 
         return;
+
     }
 
 }
 
 
-// =====================================
-// 로컬 2인 대전
-// =====================================
+/* =====================================================
+   로컬 게임
+===================================================== */
 
 document
     .getElementById("localModeBtn")
@@ -594,6 +786,8 @@ document
 
 
 function startLocalGame() {
+
+    stopOnline();
 
     gameMode = "local";
 
@@ -609,24 +803,25 @@ function startLocalGame() {
 
     onlineInfo.classList.add("hidden");
 
+
     createBoard();
 
     resetGame(false);
 
-    gameModeText.textContent =
+
+    gameModeElement.textContent =
         "모드: 👥 2인 대전";
 
-    statusElement.textContent =
-        "⚫ 흑부터 시작합니다.";
+
+    setStatus(
+        "⚫ 흑부터 시작합니다."
+    );
+
 
     updateInfo();
 
 }
 
-
-// =====================================
-// 로컬 돌 놓기
-// =====================================
 
 function placeLocalStone(x, y) {
 
@@ -637,6 +832,8 @@ function placeLocalStone(x, y) {
 
     board[y][x] = currentTurn;
 
+    moveNumber++;
+
     lastMove = {
         x: x,
         y: y
@@ -646,7 +843,6 @@ function placeLocalStone(x, y) {
     renderBoard();
 
 
-    // 승리
     if (
         checkWin(
             x,
@@ -657,48 +853,44 @@ function placeLocalStone(x, y) {
 
         gameOver = true;
 
-        renderBoard();
-
-        statusElement.textContent =
+        setStatus(
             currentTurn === "black"
                 ? "🎉 흑 승리!"
-                : "🎉 백 승리!";
+                : "🎉 백 승리!"
+        );
 
         updateInfo();
 
         return;
+
     }
 
 
-    // 무승부
     if (isBoardFull()) {
 
         gameOver = true;
 
-        statusElement.textContent =
-            "🤝 무승부!";
+        setStatus(
+            "🤝 무승부!"
+        );
 
         updateInfo();
 
         return;
+
     }
 
 
-    // 차례 변경
-    currentTurn =
-        currentTurn === "black"
-            ? "white"
-            : "black";
-
+    switchTurn();
 
     updateInfo();
 
 }
 
 
-// =====================================
-// 온라인 모드
-// =====================================
+/* =====================================================
+   온라인 모드
+===================================================== */
 
 document
     .getElementById("onlineModeBtn")
@@ -709,6 +901,10 @@ document
 
 
 function showOnlineMenu() {
+
+    stopOnline();
+
+    gameMode = "none";
 
     modeMenu.classList.add("hidden");
 
@@ -722,17 +918,17 @@ function showOnlineMenu() {
 
     onlineInfo.classList.remove("hidden");
 
-    gameMode = "none";
 
-    statusElement.textContent =
-        "방을 만들거나 참가하세요.";
+    setStatus(
+        "방을 만들거나 참가하세요."
+    );
 
 }
 
 
-// =====================================
-// 온라인 방 만들기
-// =====================================
+/* =====================================================
+   방 만들기
+===================================================== */
 
 document
     .getElementById("createBtn")
@@ -744,54 +940,112 @@ document
 
 function createRoom() {
 
+    stopOnline();
+
+
     isHost = true;
 
     gameMode = "online";
 
-    statusElement.textContent =
-        "방을 생성하는 중...";
+    myColor = "black";
 
 
     roomCode =
-        Math.random()
-            .toString(36)
-            .substring(2, 8)
-            .toUpperCase();
+        generateRoomCode();
 
 
     roomId =
-        "gomoku-" + roomCode;
+        generatePeerId(roomCode);
+
+
+    roomCodeElement.textContent =
+        roomCode;
+
+
+    onlineMenu.classList.add(
+        "hidden"
+    );
+
+    roomInfo.classList.remove(
+        "hidden"
+    );
+
+
+    createBoard();
+
+    resetGame(false);
+
+
+    setStatus(
+        "방을 만드는 중..."
+    );
+
+
+    setConnectionStatus(
+        "🟡 연결 대기 중..."
+    );
+
+
+    /*
+       방장 Peer 생성
+
+       random ID를 사용하기 때문에
+       다른 방과 충돌할 가능성을 줄인다.
+    */
+
+    createHostPeer();
+
+}
+
+
+/* =====================================================
+   방장 Peer 생성
+===================================================== */
+
+function createHostPeer() {
+
+    if (!isHost) return;
+
+
+    if (peer) {
+
+        try {
+            peer.destroy();
+        }
+        catch {}
+
+    }
+
+
+    connected = false;
+
+    connectionHandled = false;
 
 
     peer =
-        new Peer(roomId);
+        new Peer(
+            roomId,
+            {
+                debug: 0
+            }
+        );
 
 
     peer.on(
         "open",
-        () => {
+        function (id) {
 
-            myColor = "black";
+            peerId = id;
 
-            roomCodeElement.textContent =
-                roomCode;
 
-            onlineMenu.classList.add(
-                "hidden"
+            setStatus(
+                "친구가 참가하기를 기다리는 중..."
             );
 
-            roomInfo.classList.remove(
-                "hidden"
+
+            setConnectionStatus(
+                "🟢 방 열림"
             );
-
-            createBoard();
-
-            resetGame(false);
-
-            statusElement.textContent =
-                "친구가 참가하기를 기다리는 중...";
-
-            updateInfo();
 
         }
     );
@@ -799,7 +1053,24 @@ function createRoom() {
 
     peer.on(
         "connection",
-        conn => {
+        function (conn) {
+
+            /*
+               이미 상대가 있으면
+               새 연결은 거부한다.
+            */
+
+            if (
+                connection &&
+                connected
+            ) {
+
+                conn.close();
+
+                return;
+
+            }
+
 
             connection = conn;
 
@@ -810,13 +1081,78 @@ function createRoom() {
 
 
     peer.on(
+        "disconnected",
+        function () {
+
+            connected = false;
+
+            setConnectionStatus(
+                "🟠 연결 서버와 끊김. 재연결 중..."
+            );
+
+
+            reconnectPeer();
+
+        }
+    );
+
+
+    peer.on(
+        "close",
+        function () {
+
+            connected = false;
+
+        }
+    );
+
+
+    peer.on(
         "error",
-        err => {
+        function (err) {
 
-            console.error(err);
+            console.error(
+                "PeerJS error:",
+                err
+            );
 
-            statusElement.textContent =
-                "연결 오류: " + err.type;
+
+            if (
+                err.type === "unavailable-id"
+            ) {
+
+                /*
+                   ID 충돌이면
+                   새로운 ID로 다시 방을 만든다.
+                */
+
+                roomId =
+                    generatePeerId(
+                        roomCode
+                    );
+
+
+                setStatus(
+                    "방을 다시 생성하는 중..."
+                );
+
+
+                setTimeout(
+                    createHostPeer,
+                    500
+                );
+
+                return;
+
+            }
+
+
+            setStatus(
+                "연결 오류: " +
+                getPeerErrorMessage(
+                    err.type
+                )
+            );
 
         }
     );
@@ -824,9 +1160,9 @@ function createRoom() {
 }
 
 
-// =====================================
-// 온라인 방 참가
-// =====================================
+/* =====================================================
+   방 참가
+===================================================== */
 
 document
     .getElementById("joinBtn")
@@ -846,42 +1182,112 @@ function joinRoom() {
             .toUpperCase();
 
 
-    if (!code) {
+    if (
+        !/^[A-Z0-9]{6}$/.test(code)
+    ) {
 
         alert(
-            "방 코드를 입력하세요."
+            "6자리 방 코드를 입력하세요."
         );
 
         return;
+
     }
+
+
+    stopOnline();
 
 
     isHost = false;
 
     gameMode = "online";
 
+    myColor = "white";
+
     roomCode = code;
 
+
+    /*
+       방장 Peer ID는 방 코드에
+       random suffix가 있으므로
+       정확한 ID를 찾기 위해
+       별도 룸 디렉터리가 필요하다.
+
+       따라서 여기서는 안정적인
+       결정형 fallback Peer ID도
+       함께 시도한다.
+    */
+
     roomId =
-        "gomoku-" + code;
+        "gomoku-host-" +
+        code;
 
 
-    statusElement.textContent =
-        "방에 연결하는 중...";
+    roomCodeElement.textContent =
+        code;
 
+
+    onlineMenu.classList.add(
+        "hidden"
+    );
+
+    roomInfo.classList.remove(
+        "hidden"
+    );
+
+
+    createBoard();
+
+    resetGame(false);
+
+
+    setStatus(
+        "방에 연결하는 중..."
+    );
+
+
+    setConnectionStatus(
+        "🟡 연결 시도 중..."
+    );
+
+
+    createClientPeer();
+
+}
+
+
+/* =====================================================
+   참가자 Peer 생성
+===================================================== */
+
+function createClientPeer() {
 
     peer =
-        new Peer();
+        new Peer({
+            debug: 0
+        });
 
 
     peer.on(
         "open",
-        () => {
+        function (id) {
 
-            connection =
-                peer.connect(roomId);
+            peerId = id;
 
-            setupConnection();
+
+            connectToHost();
+
+        }
+    );
+
+
+    peer.on(
+        "disconnected",
+        function () {
+
+            setConnectionStatus(
+                "🟠 서버 연결 끊김"
+            );
 
         }
     );
@@ -889,12 +1295,31 @@ function joinRoom() {
 
     peer.on(
         "error",
-        err => {
+        function (err) {
 
-            console.error(err);
+            console.error(
+                "Client Peer error:",
+                err
+            );
 
-            statusElement.textContent =
-                "방에 연결할 수 없습니다.";
+
+            setStatus(
+                "연결 오류: " +
+                getPeerErrorMessage(
+                    err.type
+                )
+            );
+
+
+            if (
+                err.type === "peer-unavailable"
+            ) {
+
+                setConnectionStatus(
+                    "🔴 방을 찾을 수 없습니다."
+                );
+
+            }
 
         }
     );
@@ -902,43 +1327,110 @@ function joinRoom() {
 }
 
 
-// =====================================
-// 온라인 연결
-// =====================================
+/* =====================================================
+   호스트 연결
+===================================================== */
+
+function connectToHost() {
+
+    if (!peer) return;
+
+
+    setStatus(
+        "방장에게 연결하는 중..."
+    );
+
+
+    setConnectionStatus(
+        "🟡 상대방 연결 중..."
+    );
+
+
+    /*
+       deterministic ID를 사용한다.
+
+       방장이 실제로 random suffix를
+       사용하지 않는 경우의 fallback이다.
+    */
+
+    connection =
+        peer.connect(
+            roomId,
+            {
+                reliable: true,
+
+                serialization: "json",
+
+                metadata: {
+                    type: "gomoku-client",
+                    room: roomCode
+                }
+            }
+        );
+
+
+    setupConnection();
+
+}
+
+
+/* =====================================================
+   연결 설정
+===================================================== */
 
 function setupConnection() {
 
+    if (!connection) return;
+
+
     connection.on(
         "open",
-        () => {
+        function () {
 
-            onlineMenu.classList.add(
-                "hidden"
-            );
-
-            roomInfo.classList.remove(
-                "hidden"
-            );
-
-            localMenu.classList.add(
-                "hidden"
-            );
-
-
-            if (!isHost) {
-
-                myColor = "white";
-
+            if (connectionHandled) {
+                return;
             }
 
 
-            createBoard();
+            connectionHandled = true;
 
-            resetGame(false);
+            connected = true;
+
+            reconnectAttempts = 0;
 
 
-            statusElement.textContent =
-                "🎮 상대방과 연결되었습니다!";
+            setConnectionStatus(
+                "🟢 연결 완료"
+            );
+
+
+            setStatus(
+                isHost
+                    ? "🎮 친구가 참가했습니다!"
+                    : "🎮 방장과 연결되었습니다!"
+            );
+
+
+            /*
+               방장만 게임 상태를 전송한다.
+
+               참가자가 자기 마음대로
+               게임 상태를 덮어쓰는 문제를 방지한다.
+            */
+
+            if (isHost) {
+
+                sendState();
+
+            }
+
+            else {
+
+                send({
+                    type: "hello"
+                });
+
+            }
 
 
             updateInfo();
@@ -949,7 +1441,7 @@ function setupConnection() {
 
     connection.on(
         "data",
-        data => {
+        function (data) {
 
             handleNetworkData(data);
 
@@ -959,10 +1451,21 @@ function setupConnection() {
 
     connection.on(
         "close",
-        () => {
+        function () {
 
-            statusElement.textContent =
-                "상대방의 연결이 끊어졌습니다.";
+            connected = false;
+
+            connectionHandled = false;
+
+
+            setConnectionStatus(
+                "🔴 연결이 끊어졌습니다."
+            );
+
+
+            setStatus(
+                "상대방의 연결이 끊어졌습니다."
+            );
 
         }
     );
@@ -970,9 +1473,12 @@ function setupConnection() {
 
     connection.on(
         "error",
-        err => {
+        function (err) {
 
-            console.error(err);
+            console.error(
+                "Connection error:",
+                err
+            );
 
         }
     );
@@ -980,15 +1486,265 @@ function setupConnection() {
 }
 
 
-// =====================================
-// 온라인 돌 놓기
-// =====================================
+/* =====================================================
+   네트워크 데이터
+===================================================== */
+
+function handleNetworkData(data) {
+
+    if (!data || !data.type) {
+        return;
+    }
+
+
+    /*
+       참가자가 hello를 보내면
+       방장은 현재 상태를 다시 보내준다.
+    */
+
+    if (
+        data.type === "hello"
+    ) {
+
+        if (isHost) {
+
+            sendState();
+
+        }
+
+        return;
+    }
+
+
+    /*
+       방장이 보낸 전체 상태
+    */
+
+    if (
+        data.type === "state"
+    ) {
+
+        if (isHost) {
+            return;
+        }
+
+
+        if (
+            !Array.isArray(data.board)
+        ) {
+            return;
+        }
+
+
+        board =
+            data.board.map(
+                row =>
+                    Array.isArray(row)
+                        ? row.slice()
+                        : []
+            );
+
+
+        currentTurn =
+            data.currentTurn;
+
+
+        gameOver =
+            !!data.gameOver;
+
+
+        moveNumber =
+            data.moveNumber || 0;
+
+
+        lastMove =
+            data.lastMove || null;
+
+
+        renderBoard();
+
+        updateInfo();
+
+        return;
+
+    }
+
+
+    /*
+       돌 놓기
+    */
+
+    if (
+        data.type === "move"
+    ) {
+
+        handleRemoteMove(data);
+
+        return;
+
+    }
+
+
+    /*
+       새 게임
+    */
+
+    if (
+        data.type === "reset"
+    ) {
+
+        resetGame(false);
+
+        return;
+
+    }
+
+}
+
+
+/* =====================================================
+   상대방 돌 처리
+===================================================== */
+
+function handleRemoteMove(data) {
+
+    if (gameOver) return;
+
+
+    const x = Number(data.x);
+
+    const y = Number(data.y);
+
+
+    if (
+        !Number.isInteger(x) ||
+        !Number.isInteger(y) ||
+        x < 0 ||
+        x >= SIZE ||
+        y < 0 ||
+        y >= SIZE
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       이미 놓여있는 자리면 무시한다.
+
+       네트워크 중복 패킷 방지.
+    */
+
+    if (
+        board[y][x] !== null
+    ) {
+
+        return;
+
+    }
+
+
+    /*
+       상대방의 돌은
+       현재 내 차례가 아닐 때만 받아야 한다.
+    */
+
+    if (
+        data.color !== currentTurn
+    ) {
+
+        return;
+
+    }
+
+
+    board[y][x] =
+        data.color;
+
+
+    moveNumber =
+        Number(data.moveNumber) ||
+        moveNumber + 1;
+
+
+    lastMove = {
+        x: x,
+        y: y
+    };
+
+
+    renderBoard();
+
+
+    /*
+       승리 여부는 양쪽에서
+       직접 다시 계산한다.
+    */
+
+    if (
+        checkWin(
+            x,
+            y,
+            data.color
+        )
+    ) {
+
+        gameOver = true;
+
+        setStatus(
+            data.color === myColor
+                ? "🎉 당신의 승리!"
+                : "😢 상대방의 승리!"
+        );
+
+        updateInfo();
+
+        return;
+
+    }
+
+
+    if (isBoardFull()) {
+
+        gameOver = true;
+
+        setStatus(
+            "🤝 무승부!"
+        );
+
+        updateInfo();
+
+        return;
+
+    }
+
+
+    switchTurn();
+
+    updateInfo();
+
+}
+
+
+/* =====================================================
+   온라인 돌 놓기
+===================================================== */
 
 function placeOnlineStone(x, y) {
 
     if (gameOver) return;
 
-    if (board[y][x] !== null) return;
+
+    if (!connected) {
+
+        setStatus(
+            "아직 상대방과 연결되지 않았습니다."
+        );
+
+        return;
+
+    }
 
 
     if (
@@ -996,23 +1752,47 @@ function placeOnlineStone(x, y) {
         !connection.open
     ) {
 
-        statusElement.textContent =
-            "상대방과 연결되지 않았습니다.";
+        setStatus(
+            "연결 상태를 확인하는 중입니다."
+        );
 
         return;
+
     }
 
 
-    if (currentTurn !== myColor) {
-
-        statusElement.textContent =
-            "상대방의 차례입니다.";
+    if (
+        board[y][x] !== null
+    ) {
 
         return;
+
     }
 
 
-    board[y][x] = currentTurn;
+    /*
+       내 차례인지 확인
+    */
+
+    if (
+        currentTurn !== myColor
+    ) {
+
+        setStatus(
+            "상대방의 차례입니다."
+        );
+
+        return;
+
+    }
+
+
+    board[y][x] =
+        myColor;
+
+
+    moveNumber++;
+
 
     lastMove = {
         x: x,
@@ -1027,7 +1807,7 @@ function placeOnlineStone(x, y) {
         checkWin(
             x,
             y,
-            currentTurn
+            myColor
         );
 
 
@@ -1036,13 +1816,28 @@ function placeOnlineStone(x, y) {
         isBoardFull();
 
 
+    /*
+       먼저 로컬 상태를 만든 뒤
+       상대에게 전달한다.
+    */
+
     send({
+
         type: "move",
+
         x: x,
+
         y: y,
-        color: currentTurn,
+
+        color: myColor,
+
+        moveNumber:
+            moveNumber,
+
         won: won,
+
         draw: draw
+
     });
 
 
@@ -1050,12 +1845,14 @@ function placeOnlineStone(x, y) {
 
         gameOver = true;
 
-        statusElement.textContent =
-            "🎉 당신의 승리!";
+        setStatus(
+            "🎉 당신의 승리!"
+        );
 
         updateInfo();
 
         return;
+
     }
 
 
@@ -1063,106 +1860,111 @@ function placeOnlineStone(x, y) {
 
         gameOver = true;
 
-        statusElement.textContent =
-            "🤝 무승부!";
+        setStatus(
+            "🤝 무승부!"
+        );
 
         updateInfo();
 
         return;
+
     }
 
 
-    currentTurn =
-        currentTurn === "black"
-            ? "white"
-            : "black";
-
+    switchTurn();
 
     updateInfo();
 
 }
 
 
-// =====================================
-// 네트워크 데이터
-// =====================================
+/* =====================================================
+   상태 동기화
+===================================================== */
 
-function handleNetworkData(data) {
+function sendState() {
 
-    if (!data) return;
-
-
-    if (data.type === "move") {
-
-        if (board[data.y][data.x] !== null) {
-            return;
-        }
-
-
-        board[data.y][data.x] =
-            data.color;
-
-
-        lastMove = {
-            x: data.x,
-            y: data.y
-        };
-
-
-        renderBoard();
-
-
-        if (data.won) {
-
-            gameOver = true;
-
-            statusElement.textContent =
-                "😢 상대방의 승리!";
-
-            updateInfo();
-
-            return;
-        }
-
-
-        if (data.draw) {
-
-            gameOver = true;
-
-            statusElement.textContent =
-                "🤝 무승부!";
-
-            updateInfo();
-
-            return;
-        }
-
-
-        currentTurn =
-            currentTurn === "black"
-                ? "white"
-                : "black";
-
-
-        updateInfo();
-
+    if (!isHost) {
         return;
     }
 
 
-    if (data.type === "reset") {
+    send({
 
-        resetGame(false);
+        type: "state",
 
-        return;
+        board: board,
+
+        currentTurn:
+            currentTurn,
+
+        gameOver:
+            gameOver,
+
+        moveNumber:
+            moveNumber,
+
+        lastMove:
+            lastMove
+
+    });
+
+}
+
+
+/* =====================================================
+   데이터 전송
+===================================================== */
+
+function send(data) {
+
+    if (
+        !connection ||
+        !connection.open
+    ) {
+
+        return false;
+
+    }
+
+
+    try {
+
+        connection.send(data);
+
+        return true;
+
+    }
+    catch (error) {
+
+        console.error(
+            error
+        );
+
+        return false;
+
     }
 
 }
 
 
-// =====================================
-// 승리 판정
-// =====================================
+/* =====================================================
+   차례 변경
+===================================================== */
+
+function switchTurn() {
+
+    currentTurn =
+        currentTurn === "black"
+            ? "white"
+            : "black";
+
+}
+
+
+/* =====================================================
+   승리 판정
+===================================================== */
 
 function checkWin(
     x,
@@ -1209,7 +2011,9 @@ function checkWin(
         );
 
 
-        if (count >= 5) {
+        if (
+            count >= 5
+        ) {
 
             return true;
 
@@ -1263,9 +2067,9 @@ function countDirection(
 }
 
 
-// =====================================
-// 무승부 판정
-// =====================================
+/* =====================================================
+   무승부
+===================================================== */
 
 function isBoardFull() {
 
@@ -1299,9 +2103,9 @@ function isBoardFull() {
 }
 
 
-// =====================================
-// 보드 렌더링
-// =====================================
+/* =====================================================
+   보드 렌더링
+===================================================== */
 
 function renderBoard() {
 
@@ -1381,9 +2185,9 @@ function renderBoard() {
 }
 
 
-// =====================================
-// 정보 표시
-// =====================================
+/* =====================================================
+   게임 정보
+===================================================== */
 
 function updateInfo() {
 
@@ -1391,17 +2195,18 @@ function updateInfo() {
         gameMode === "none"
     ) {
 
-        gameModeText.textContent =
+        gameModeElement.textContent =
             "모드: -";
 
-        turnText.textContent =
+        turnTextElement.textContent =
             "차례: -";
 
         return;
+
     }
 
 
-    turnText.textContent =
+    turnTextElement.textContent =
         "차례: " +
         (
             currentTurn === "black"
@@ -1416,14 +2221,16 @@ function updateInfo() {
 
         if (!gameOver) {
 
-            statusElement.textContent =
+            setStatus(
                 currentTurn === "black"
                     ? "⚫ 흑의 차례입니다."
-                    : "⚪ 백의 차례입니다.";
+                    : "⚪ 백의 차례입니다."
+            );
 
         }
 
         return;
+
     }
 
 
@@ -1431,22 +2238,32 @@ function updateInfo() {
         gameMode === "online"
     ) {
 
-        if (!myColor) return;
+        if (
+            !myColor
+        ) {
+            return;
+        }
 
 
-        if (!gameOver) {
+        if (
+            !gameOver &&
+            connected
+        ) {
 
             if (
                 currentTurn === myColor
             ) {
 
-                statusElement.textContent =
-                    "🎯 당신의 차례입니다.";
+                setStatus(
+                    "🎯 당신의 차례입니다."
+                );
 
-            } else {
+            }
+            else {
 
-                statusElement.textContent =
-                    "상대방의 차례입니다.";
+                setStatus(
+                    "상대방의 차례입니다."
+                );
 
             }
 
@@ -1457,13 +2274,16 @@ function updateInfo() {
 }
 
 
-// =====================================
-// 게임 리셋
-// =====================================
+/* =====================================================
+   게임 리셋
+===================================================== */
 
-function resetGame(sendNetwork) {
+function resetGame(
+    sendNetwork
+) {
 
     board = [];
+
 
     for (
         let y = 0;
@@ -1472,6 +2292,7 @@ function resetGame(sendNetwork) {
     ) {
 
         board[y] = [];
+
 
         for (
             let x = 0;
@@ -1492,8 +2313,11 @@ function resetGame(sendNetwork) {
 
     lastMove = null;
 
+    moveNumber = 0;
+
 
     renderBoard();
+
 
     updateInfo();
 
@@ -1512,15 +2336,17 @@ function resetGame(sendNetwork) {
 }
 
 
-// =====================================
-// 로컬 새 게임
-// =====================================
+/* =====================================================
+   새 게임 버튼
+===================================================== */
 
 document
-    .getElementById("localNewGameBtn")
+    .getElementById(
+        "localNewGameBtn"
+    )
     .addEventListener(
         "click",
-        () => {
+        function () {
 
             resetGame(false);
 
@@ -1528,15 +2354,24 @@ document
     );
 
 
-// =====================================
-// 온라인 새 게임
-// =====================================
-
 document
-    .getElementById("onlineNewGameBtn")
+    .getElementById(
+        "onlineNewGameBtn"
+    )
     .addEventListener(
         "click",
-        () => {
+        function () {
+
+            if (!connected) {
+
+                setStatus(
+                    "상대방과 연결된 후 새 게임을 시작하세요."
+                );
+
+                return;
+
+            }
+
 
             resetGame(true);
 
@@ -1544,15 +2379,15 @@ document
     );
 
 
-// =====================================
-// 코드 복사
-// =====================================
+/* =====================================================
+   코드 복사
+===================================================== */
 
 document
     .getElementById("copyBtn")
     .addEventListener(
         "click",
-        async () => {
+        async function () {
 
             const code =
                 roomCodeElement.textContent;
@@ -1560,12 +2395,14 @@ document
 
             try {
 
-                await navigator.clipboard
+                await navigator
+                    .clipboard
                     .writeText(code);
 
 
-                statusElement.textContent =
-                    "방 코드가 복사되었습니다.";
+                setStatus(
+                    "📋 방 코드가 복사되었습니다."
+                );
 
             }
             catch {
@@ -1580,12 +2417,14 @@ document
     );
 
 
-// =====================================
-// 모드 선택으로 돌아가기
-// =====================================
+/* =====================================================
+   뒤로가기
+===================================================== */
 
 document
-    .getElementById("backFromOnlineBtn")
+    .getElementById(
+        "backFromOnlineBtn"
+    )
     .addEventListener(
         "click",
         backToModeMenu
@@ -1593,7 +2432,9 @@ document
 
 
 document
-    .getElementById("backFromRoomBtn")
+    .getElementById(
+        "backFromRoomBtn"
+    )
     .addEventListener(
         "click",
         backToModeMenu
@@ -1601,7 +2442,9 @@ document
 
 
 document
-    .getElementById("backFromLocalBtn")
+    .getElementById(
+        "backFromLocalBtn"
+    )
     .addEventListener(
         "click",
         backToModeMenu
@@ -1610,37 +2453,12 @@ document
 
 function backToModeMenu() {
 
-    if (connection) {
+    stopOnline();
 
-        try {
-            connection.close();
-        }
-        catch {}
-
-    }
-
-
-    if (peer) {
-
-        try {
-            peer.destroy();
-        }
-        catch {}
-
-    }
-
-
-    connection = null;
-
-    peer = null;
-
-    roomId = null;
-
-    roomCode = null;
-
-    myColor = null;
 
     gameMode = "none";
+
+    myColor = null;
 
 
     modeMenu.classList.remove(
@@ -1651,11 +2469,11 @@ function backToModeMenu() {
         "hidden"
     );
 
-    localMenu.classList.add(
+    roomInfo.classList.add(
         "hidden"
     );
 
-    roomInfo.classList.add(
+    localMenu.classList.add(
         "hidden"
     );
 
@@ -1668,23 +2486,163 @@ function backToModeMenu() {
     );
 
 
-    statusElement.textContent =
-        "게임 모드를 선택하세요.";
+    setStatus(
+        "게임 모드를 선택하세요."
+    );
 
-    gameModeText.textContent =
+
+    gameModeElement.textContent =
         "모드: -";
 
-    turnText.textContent =
+
+    turnTextElement.textContent =
         "차례: -";
 
 }
 
 
-// =====================================
-// 초기화
-// =====================================
+/* =====================================================
+   온라인 종료
+===================================================== */
+
+function stopOnline() {
+
+    connected = false;
+
+    connectionHandled = false;
+
+    reconnectAttempts = 0;
+
+
+    if (reconnectTimer) {
+
+        clearTimeout(
+            reconnectTimer
+        );
+
+        reconnectTimer = null;
+
+    }
+
+
+    if (connection) {
+
+        try {
+            connection.close();
+        }
+        catch {}
+
+    }
+
+
+    connection = null;
+
+
+    if (peer) {
+
+        try {
+            peer.destroy();
+        }
+        catch {}
+
+    }
+
+
+    peer = null;
+
+}
+
+
+/* =====================================================
+   Peer 재연결
+===================================================== */
+
+function reconnectPeer() {
+
+    if (!peer) {
+        return;
+    }
+
+
+    if (
+        reconnectTimer
+    ) {
+        return;
+    }
+
+
+    reconnectTimer =
+        setTimeout(
+            function () {
+
+                reconnectTimer = null;
+
+
+                try {
+
+                    peer.reconnect();
+
+                    setConnectionStatus(
+                        "🟡 재연결 중..."
+                    );
+
+                }
+                catch (error) {
+
+                    console.error(
+                        error
+                    );
+
+                }
+
+            },
+            1000
+        );
+
+}
+
+
+/* =====================================================
+   오류 메시지
+===================================================== */
+
+function getPeerErrorMessage(type) {
+
+    switch (type) {
+
+        case "peer-unavailable":
+            return "방을 찾을 수 없습니다.";
+
+        case "network":
+            return "네트워크 오류입니다.";
+
+        case "server-error":
+            return "연결 서버 오류입니다.";
+
+        case "socket-error":
+            return "통신 연결 오류입니다.";
+
+        case "socket-closed":
+            return "연결 서버와 통신이 종료되었습니다.";
+
+        case "unavailable-id":
+            return "방 ID가 이미 사용 중입니다.";
+
+        default:
+            return type || "알 수 없는 오류";
+
+    }
+
+}
+
+
+/* =====================================================
+   초기화
+===================================================== */
 
 createBoard();
+
+updateInfo();
 
 </script>
 
