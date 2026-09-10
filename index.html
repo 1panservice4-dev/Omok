@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>온라인 오목</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #222;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: min(95vw, 800px);
+    text-align: center;
+}
+
+h1 {
+    margin: 10px 0 5px;
+}
+
+#status {
+    margin: 8px 0;
+    font-size: 16px;
+    color: #ddd;
+}
+
+.menu {
+    background: #333;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+button,
+input {
+    font-size: 16px;
+    padding: 10px 14px;
+    border-radius: 7px;
+    border: none;
+    margin: 4px;
+}
+
+button {
+    cursor: pointer;
+    background: #e0a83b;
+    color: #111;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #f0bd4d;
+}
+
+input {
+    width: 180px;
+}
+
+#roomCode {
+    font-weight: bold;
+    color: #ffd75a;
+    font-size: 20px;
+}
+
+.board-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#board {
+    width: min(92vw, 700px);
+    height: min(92vw, 700px);
+
+    background:
+        linear-gradient(#0000 0 0),
+        #d6a64a;
+
+    border: 10px solid #5b3517;
+    box-shadow: 0 8px 25px #0008;
+
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+
+    padding: 2%;
+    position: relative;
+}
+
+.cell {
+    position: relative;
+    cursor: pointer;
+}
+
+.cell::before {
+    content: "";
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: 50%;
+
+    height: 1px;
+    background: #513714;
+}
+
+.cell::after {
+    content: "";
+    position: absolute;
+
+    top: 0;
+    bottom: 0;
+    left: 50%;
+
+    width: 1px;
+    background: #513714;
+}
+
+.stone {
+    position: absolute;
+
+    width: 82%;
+    height: 82%;
+
+    left: 9%;
+    top: 9%;
+
+    border-radius: 50%;
+
+    z-index: 5;
+
+    box-shadow:
+        inset -3px -4px 5px #0006,
+        inset 2px 2px 4px #fff5,
+        2px 3px 5px #0007;
+}
+
+.black {
+    background: radial-gradient(circle at 35% 30%, #555, #111 65%, #000);
+}
+
+.white {
+    background: radial-gradient(circle at 35% 30%, #fff, #ddd 65%, #aaa);
+}
+
+.last {
+    outline: 3px solid red;
+    outline-offset: -2px;
+}
+
+.info {
+    margin-top: 12px;
+    font-size: 17px;
+}
+
+.hidden {
+    display: none;
+}
+
+#copyBtn {
+    background: #5796e6;
+    color: white;
+}
+
+@media(max-width:500px) {
+    h1 {
+        font-size: 24px;
+    }
+
+    button,
+    input {
+        font-size: 14px;
+    }
+
+    #status {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>⚫ 온라인 오목 ⚪</h1>
+
+    <div id="status">
+        온라인 연결 준비 중...
+    </div>
+
+    <div class="menu">
+
+        <div id="mainMenu">
+
+            <button id="createBtn">
+                방 만들기
+            </button>
+
+            <br>
+
+            <input
+                id="roomInput"
+                type="text"
+                placeholder="방 코드 입력"
+                maxlength="20"
+            >
+
+            <button id="joinBtn">
+                방 참가
+            </button>
+
+        </div>
+
+        <div id="roomInfo" class="hidden">
+
+            <div>
+                친구에게 이 코드를 알려주세요.
+            </div>
+
+            <div id="roomCode">
+                -
+            </div>
+
+            <button id="copyBtn">
+                코드 복사
+            </button>
+
+            <button id="newGameBtn">
+                새 게임
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="board-wrap">
+        <div id="board"></div>
+    </div>
+
+    <div class="info">
+        <span id="myColor">색상: -</span>
+        &nbsp; | &nbsp;
+        <span id="turnText">차례: -</span>
+    </div>
+
+</div>
+
+
+<!-- PeerJS -->
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+<script>
+
+const SIZE = 15;
+
+let board = [];
+
+let myColor = null;
+let currentTurn = "black";
+
+let peer = null;
+let connection = null;
+
+let isHost = false;
+let roomId = null;
+
+let gameOver = false;
+
+const boardElement =
+    document.getElementById("board");
+
+const statusElement =
+    document.getElementById("status");
+
+const myColorElement =
+    document.getElementById("myColor");
+
+const turnTextElement =
+    document.getElementById("turnText");
+
+const roomCodeElement =
+    document.getElementById("roomCode");
+
+const roomInfo =
+    document.getElementById("roomInfo");
+
+const mainMenu =
+    document.getElementById("mainMenu");
+
+
+// ------------------------------------
+// 보드 생성
+// ------------------------------------
+
+function createBoard() {
+
+    boardElement.innerHTML = "";
+
+    board = [];
+
+    for (let y = 0; y < SIZE; y++) {
+
+        board[y] = [];
+
+        for (let x = 0; x < SIZE; x++) {
+
+            board[y][x] = null;
+
+            const cell =
+                document.createElement("div");
+
+            cell.className = "cell";
+
+            cell.dataset.x = x;
+            cell.dataset.y = y;
+
+            cell.addEventListener(
+                "click",
+                () => placeStone(x, y, true)
+            );
+
+            boardElement.appendChild(cell);
+        }
+    }
+}
+
+
+// ------------------------------------
+// 방 만들기
+// ------------------------------------
+
+document
+    .getElementById("createBtn")
+    .addEventListener("click", createRoom);
+
+
+function createRoom() {
+
+    isHost = true;
+
+    statusElement.textContent =
+        "방 생성 중...";
+
+    const randomCode =
+        Math.random()
+            .toString(36)
+            .substring(2, 8)
+            .toUpperCase();
+
+    roomId = "gomoku-" + randomCode;
+
+    peer = new Peer(roomId);
+
+    peer.on("open", () => {
+
+        myColor = "black";
+
+        roomCodeElement.textContent =
+            randomCode;
+
+        mainMenu.classList.add("hidden");
+        roomInfo.classList.remove("hidden");
+
+        statusElement.textContent =
+            "친구가 참가하기를 기다리는 중...";
+
+        updateInfo();
+    });
+
+
+    peer.on("connection", conn => {
+
+        if (connection) {
+            conn.close();
+        }
+
+        connection = conn;
+
+        setupConnection();
+
+    });
+
+
+    peer.on("error", err => {
+
+        console.error(err);
+
+        statusElement.textContent =
+            "연결 오류: " + err.type;
+
+    });
+
+}
+
+
+// ------------------------------------
+// 방 참가
+// ------------------------------------
+
+document
+    .getElementById("joinBtn")
+    .addEventListener("click", joinRoom);
+
+
+function joinRoom() {
+
+    const code =
+        document
+            .getElementById("roomInput")
+            .value
+            .trim()
+            .toUpperCase();
+
+    if (!code) {
+
+        alert("방 코드를 입력하세요.");
+
+        return;
+    }
+
+    isHost = false;
+
+    roomId = "gomoku-" + code;
+
+    statusElement.textContent =
+        "방에 연결하는 중...";
+
+    peer = new Peer();
+
+    peer.on("open", () => {
+
+        connection =
+            peer.connect(roomId);
+
+        setupConnection();
+
+    });
+
+
+    peer.on("error", err => {
+
+        console.error(err);
+
+        statusElement.textContent =
+            "방에 연결할 수 없습니다.";
+
+    });
+
+}
+
+
+// ------------------------------------
+// 연결 설정
+// ------------------------------------
+
+function setupConnection() {
+
+    connection.on("open", () => {
+
+        mainMenu.classList.add("hidden");
+        roomInfo.classList.remove("hidden");
+
+        if (!isHost) {
+
+            myColor = "white";
+
+        }
+
+        statusElement.textContent =
+            "친구와 연결되었습니다!";
+
+        updateInfo();
+
+        sendState();
+
+    });
+
+
+    connection.on("data", data => {
+
+        handleNetworkData(data);
+
+    });
+
+
+    connection.on("close", () => {
+
+        statusElement.textContent =
+            "상대방의 연결이 끊어졌습니다.";
+
+    });
+
+
+    connection.on("error", err => {
+
+        console.error(err);
+
+    });
+
+}
+
+
+// ------------------------------------
+// 네트워크 데이터 처리
+// ------------------------------------
+
+function handleNetworkData(data) {
+
+    if (!data || !data.type) return;
+
+
+    // 상대가 돌을 놓음
+    if (data.type === "move") {
+
+        placeStone(
+            data.x,
+            data.y,
+            false
+        );
+
+        return;
+    }
+
+
+    // 새 게임
+    if (data.type === "reset") {
+
+        resetGame(false);
+
+        return;
+    }
+
+
+    // 전체 상태 동기화
+    if (data.type === "state") {
+
+        if (data.board) {
+
+            board = data.board;
+
+            currentTurn =
+                data.currentTurn;
+
+            gameOver =
+                data.gameOver;
+
+            renderBoard();
+
+            updateInfo();
+
+        }
+
+    }
+
+}
+
+
+// ------------------------------------
+// 돌 놓기
+// ------------------------------------
+
+function placeStone(x, y, local) {
+
+    if (gameOver) return;
+
+    if (board[y][x] !== null) return;
+
+
+    // 내가 직접 클릭한 경우
+    if (local) {
+
+        if (!connection ||
+            !connection.open) {
+
+            statusElement.textContent =
+                "상대방과 연결되지 않았습니다.";
+
+            return;
+        }
+
+        if (currentTurn !== myColor) {
+
+            statusElement.textContent =
+                "상대방의 차례입니다.";
+
+            return;
+        }
+
+    }
+
+
+    board[y][x] = currentTurn;
+
+
+    renderBoard();
+
+
+    if (checkWin(x, y, currentTurn)) {
+
+        gameOver = true;
+
+        updateInfo();
+
+        const winner =
+            currentTurn === myColor
+                ? "🎉 당신의 승리!"
+                : "😢 상대방의 승리!";
+
+        statusElement.textContent =
+            winner;
+
+        if (local) {
+
+            send({
+                type: "move",
+                x: x,
+                y: y
+            });
+
+        }
+
+        return;
+    }
+
+
+    currentTurn =
+        currentTurn === "black"
+            ? "white"
+            : "black";
+
+
+    updateInfo();
+
+
+    if (local) {
+
+        send({
+            type: "move",
+            x: x,
+            y: y
+        });
+
+    }
+
+}
+
+
+// ------------------------------------
+// 승리 판정
+// ------------------------------------
+
+function checkWin(x, y, color) {
+
+    const directions = [
+
+        [1, 0],
+        [0, 1],
+        [1, 1],
+        [1, -1]
+
+    ];
+
+
+    for (const [dx, dy] of directions) {
+
+        let count = 1;
+
+
+        count += countDirection(
+            x,
+            y,
+            dx,
+            dy,
+            color
+        );
+
+
+        count += countDirection(
+            x,
+            y,
+            -dx,
+            -dy,
+            color
+        );
+
+
+        if (count >= 5) {
+
+            return true;
+
+        }
+
+    }
+
+    return false;
+}
+
+
+function countDirection(
+    x,
+    y,
+    dx,
+    dy,
+    color
+) {
+
+    let count = 0;
+
+    let nx = x + dx;
+    let ny = y + dy;
+
+
+    while (
+
+        nx >= 0 &&
+        nx < SIZE &&
+        ny >= 0 &&
+        ny < SIZE &&
+        board[ny][nx] === color
+
+    ) {
+
+        count++;
+
+        nx += dx;
+        ny += dy;
+
+    }
+
+
+    return count;
+}
+
+
+// ------------------------------------
+// 보드 화면 출력
+// ------------------------------------
+
+function renderBoard() {
+
+    const cells =
+        boardElement.children;
+
+
+    for (let y = 0; y < SIZE; y++) {
+
+        for (let x = 0; x < SIZE; x++) {
+
+            const index =
+                y * SIZE + x;
+
+            const cell =
+                cells[index];
+
+            cell.innerHTML = "";
+
+
+            if (board[y][x]) {
+
+                const stone =
+                    document.createElement("div");
+
+                stone.className =
+                    "stone " +
+                    (
+                        board[y][x] === "black"
+                            ? "black"
+                            : "white"
+                    );
+
+                cell.appendChild(stone);
+
+            }
+
+        }
+
+    }
+
+}
+
+
+// ------------------------------------
+// 정보 업데이트
+// ------------------------------------
+
+function updateInfo() {
+
+    if (!myColor) {
+
+        myColorElement.textContent =
+            "색상: -";
+
+    } else {
+
+        myColorElement.textContent =
+            "당신: " +
+            (
+                myColor === "black"
+                    ? "⚫ 흑"
+                    : "⚪ 백"
+            );
+
+    }
+
+
+    turnTextElement.textContent =
+        "차례: " +
+        (
+            currentTurn === "black"
+                ? "⚫ 흑"
+                : "⚪ 백"
+        );
+
+
+    if (!gameOver) {
+
+        if (currentTurn === myColor) {
+
+            statusElement.textContent =
+                "당신의 차례입니다.";
+
+        } else {
+
+            statusElement.textContent =
+                "상대방의 차례입니다.";
+
+        }
+
+    }
+
+}
+
+
+// ------------------------------------
+// 데이터 보내기
+// ------------------------------------
+
+function send(data) {
+
+    if (
+        connection &&
+        connection.open
+    ) {
+
+        connection.send(data);
+
+    }
+
+}
+
+
+function sendState() {
+
+    send({
+
+        type: "state",
+
+        board: board,
+
+        currentTurn: currentTurn,
+
+        gameOver: gameOver
+
+    });
+
+}
+
+
+// ------------------------------------
+// 새 게임
+// ------------------------------------
+
+document
+    .getElementById("newGameBtn")
+    .addEventListener(
+        "click",
+        () => resetGame(true)
+    );
+
+
+function resetGame(local) {
+
+    board = [];
+
+    for (let y = 0; y < SIZE; y++) {
+
+        board[y] = [];
+
+        for (let x = 0; x < SIZE; x++) {
+
+            board[y][x] = null;
+
+        }
+
+    }
+
+
+    currentTurn = "black";
+
+    gameOver = false;
+
+    renderBoard();
+
+    updateInfo();
+
+
+    if (local) {
+
+        send({
+            type: "reset"
+        });
+
+    }
+
+}
+
+
+// ------------------------------------
+// 방 코드 복사
+// ------------------------------------
+
+document
+    .getElementById("copyBtn")
+    .addEventListener(
+        "click",
+        async () => {
+
+            const code =
+                roomCodeElement.textContent;
+
+            try {
+
+                await navigator.clipboard.writeText(code);
+
+                statusElement.textContent =
+                    "방 코드가 복사되었습니다.";
+
+            } catch {
+
+                alert(
+                    "방 코드: " + code
+                );
+
+            }
+
+        }
+    );
+
+
+// ------------------------------------
+// 초기화
+// ------------------------------------
+
+createBoard();
+
+updateInfo();
+
+</script>
+
+</body>
+</html>
