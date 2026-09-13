@@ -1600,9 +1600,19 @@ function handleNetworkData(data) {
     ) {
 
         resetMatch(false);
+        setStatus("새 판 시작! ⚫ 흑부터 시작합니다.");
+        updateInfo();
 
         return;
 
+    }
+
+    // 3승 최종 승리 후 방장이 보내는 전체 경기 초기화
+    if (data.type === "matchReset") {
+        resetMatch(false);
+        setStatus("새 경기 시작! ⚫ 흑부터 시작합니다.");
+        updateInfo();
+        return;
     }
 
 }
@@ -1696,7 +1706,8 @@ function handleRemoteMove(data) {
         )
     ) {
 
-        finishRound(data.color, false);
+        // 온라인에서는 방장이 최종 라운드/초기화를 확정합니다.
+        finishRound(data.color, gameMode === "online" && isHost);
         return;
 
     }
@@ -2339,6 +2350,27 @@ function finishRound(winner, notifyNetwork) {
         if (notifyNetwork && gameMode === "online") {
             send({ type: "roundResult", winner, blackWins, whiteWins, roundNumber, matchOver: true, removeUsed });
         }
+
+        // 3승으로 최종 승자가 결정되면 잠시 결과를 보여준 뒤
+        // 점수/판 번호/돌 빼기 사용 여부까지 모두 초기화합니다.
+        // 온라인에서는 방장만 초기화를 보내서 양쪽이 동시에 리셋되게 합니다.
+        setTimeout(function () {
+            if (gameMode !== "online") {
+                resetMatch(false);
+                setStatus("새 경기 시작! ⚫ 흑부터 시작합니다.");
+                updateInfo();
+                return;
+            }
+
+            // 온라인에서는 방장만 전체 경기 초기화를 실행하고
+            // 상대방에게도 같은 초기화 명령을 보냅니다.
+            if (isHost && connected) {
+                resetMatch(false);
+                send({ type: "matchReset" });
+                setStatus("새 경기 시작! ⚫ 흑부터 시작합니다.");
+                updateInfo();
+            }
+        }, 2000);
         return;
     }
 
